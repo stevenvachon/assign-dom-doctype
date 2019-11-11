@@ -1,0 +1,69 @@
+{
+  "private": true,
+  "name": "assign-dom-doctype",
+  "description": "Insert, replace or remove a DocumentType node within a Document.",
+  "version": "1.0.0-beta",
+  "license": "MIT",
+  "author": "Steven Vachon <contact@svachon.com> (https://svachon.com)",
+  "repository": "github:stevenvachon/assign-dom-doctype",
+  "dependencies": {
+    "protochain": "^1.0.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "cartesian-product": "^2.1.2",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.8",
+    "gzip-size-cli": "^3.0.0",
+    "mocha": "^6.2.2",
+    "npm-watch": "~0.6.0",
+    "nyc": "^14.1.1",
+    "parcel": "^1.12.4",
+    "puppeteer": "^2.0.0",
+    "puppeteer-to-istanbul": "^1.2.2",
+    "rimraf": "^3.0.0"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "scripts": {
+    "build": "npm run build-release && npm run build-size && npm run build-test",
+    "build-release": "babel index.mjs --out-file=index.js --plugins=add-module-exports --presets=@babel/env --source-maps",
+    "build-size": "parcel build index.js --experimental-scope-hoisting --global=assignDoctype --log-level=1 --no-cache --no-source-maps --out-dir='.' --out-file=temp.js --public-url='.' && gzip-size temp.js && rimraf temp.js",
+    "build-test": "parcel build index.js --global=assignDoctype --log-level=1 --no-cache --out-dir='.' --out-file=temp.js --public-url='.'",
+    "ci": "npm test && nyc report --reporter=text-lcov | coveralls",
+    "posttest": "nyc report --reporter=text-summary --reporter=html && rimraf temp.js temp.js.map",
+    "prepublishOnly": "npm test",
+    "pretest": "npm run build",
+    "test": "nyc --reporter=none mocha test.js --bail --check-leaks --timeout=5000",
+    "test:watch": "npm-watch test"
+  },
+  "watch": {
+    "test": {
+      "inherit": true,
+      "patterns": [
+        "index.mjs",
+        "test.js"
+      ]
+    }
+  },
+  "main": "index.js",
+  "exports": {
+    ".": "index.mjs"
+  },
+  "files": [
+    "index.js",
+    "index.js.map",
+    "index.mjs"
+  ],
+  "keywords": [
+    "doctype",
+    "document",
+    "document-type",
+    "dom",
+    "node"
+  ]
+}
